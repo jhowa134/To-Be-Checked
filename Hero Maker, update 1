@@ -1,0 +1,172 @@
+import java.util.Random;
+
+class Hero{
+   String name;
+   String role;
+   int attack;
+   int spell;
+   int mSlots;
+   int cSlots;
+   double range;
+   int maxHealth;
+   double curHealth;
+   double regen;
+   int def;
+   int xp;
+   int level = 1;
+   
+   public Hero(String n){ //Dont directly call this ever, unless bad
+      name = n;               
+   } 
+   
+   String getName(){
+      return name;
+   }
+   
+   void stats(){
+      System.out.println(""+name+"'s Stats ("+role+") :");
+      System.out.println("Attack damage: "+attack+"\n"+"Spell Damage: "+spell+"\n"+"Spell slots: " + cSlots+"/"+mSlots+"\n"+"Range: "+range+"\n"+"Health: "+ curHealth+"/"+maxHealth+"\n"+"Defense: " +def+"\n"+"XP needed for next level: " +((level*100)-xp)+"\n");
+      // put the prints for all the things   
+   }
+}
+
+class Mage extends Hero{
+   
+   //Build the growth rates for when the hero levels up
+   int sG = 4;
+   double raG = 0.25;
+   int hG = 3;
+   double reG = 0.4;
+   int defG = 1;  
+   
+   public Mage(String n, int x){
+      super(n);
+      xp = x;
+      
+      role = "Mage";
+      attack = 1;
+      spell = 6;
+      mSlots = 3;
+      cSlots = mSlots;
+      range = 3;
+      maxHealth = 12;  
+      regen = 0.6;
+      def = 1;
+      
+      while(xp > (level*100)){
+         level++;
+         xp = xp -(level*100);     
+      }
+      
+      
+      //Level up the character based on how many times they have leveled up
+      for(int i = 1; i<level; i++){
+         spell+=sG;
+         range+=raG;
+         maxHealth+=hG;
+         regen+=reG;
+         mSlots++;
+         cSlots++;
+      }      
+      
+      curHealth = maxHealth;   
+   }
+   
+   void addXp(int add){
+      xp+=add;
+      System.out.println(""+name+" earned "+add+" experience!");
+      
+      while(xp >= (level*100)){
+         xp = xp -(level*100);
+         level++;
+         
+         spell+=sG;
+         range+=raG;
+         maxHealth+=hG;
+         regen+=reG;
+         curHealth+=hG;
+         mSlots++;
+         cSlots++;
+         
+         System.out.println(""+name+" leveled up to level "+level+"!");      
+      }
+      
+      
+   }
+}
+
+class Warrior extends Hero{
+   
+   int aG = 3;
+   int hG = 3;
+   int dG = 2;
+   double reG = .8;
+   
+     
+   public Warrior(String n, int x){
+      super(n);
+      xp = x;
+      
+      role = "Warrior";
+      attack = 4;
+      range = 2;
+      maxHealth = 20;  
+      regen = 1.2;
+      def = 2;
+      
+      while(xp > (level*100)){
+         level++;
+         xp = xp -(level*100);     
+      }
+
+      for(int i = 1; i<level; i++){
+         attack+=aG;
+         maxHealth+=hG;
+         regen+=reG;
+         def+=dG;
+      }      
+      
+      curHealth = maxHealth;   
+   
+   }
+   
+   void addXp(int add){
+      xp+=add;
+      System.out.println(""+name+" earned "+add+" experience!");
+      
+      while(xp >= (level*100)){
+         xp = xp -(level*100);
+         level++;
+         
+         maxHealth+=hG;
+         regen+=reG;
+         curHealth+=hG;
+         def+=dG;
+         attack+=aG;
+         
+         System.out.println(""+name+" leveled up to level "+level+"!");      
+      }
+   }
+}
+
+public class HeroMaker{
+   public static void main(String[] args){
+      Mage Velhar = new Mage("Velhar", 0); 
+   
+      Warrior Lothral = new Warrior("Lothrarl", 0);
+      Lothral.stats();
+      Velhar.stats();
+      
+      Lothral.addXp(160);
+      Velhar.addXp(160);
+      
+      Lothral.stats();
+      Velhar.stats();
+      
+      Lothral.addXp(180);
+      Velhar.addXp(180);
+      
+      Lothral.stats();
+      Velhar.stats();
+   } 
+}
