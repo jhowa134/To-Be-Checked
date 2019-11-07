@@ -1,0 +1,77 @@
+//This was my way of filling out our last lab, in which we make a converter of time into am and pm time, or tell the user the input is non-valid
+
+import java.util.Scanner;
+
+
+
+class SDF{
+    int hour;
+    int mins;
+    
+    public SDF(String h,String m){
+      hour = Integer.parseInt(h);   
+      mins = Integer.parseInt(m);
+    }
+    
+    String toFull(){
+       if(hour<12){
+          return (""+hour+":"+mins+" AM");
+       }
+       else{
+         return (""+(hour-12)+":"+mins+" PM");
+       }
+    }
+    
+
+}
+
+class NoTimeExists extends Exception{
+   
+
+}
+
+
+class ParseException extends Exception{
+
+
+}
+
+public class ExceptionHandler{
+   public static void main(String[] args){
+      Scanner S = new Scanner(System.in);
+      String ans = "n";
+      String time = null;
+      do{  //bulk logic
+        System.out.println("Enter the time in 24 hour notation!");
+        time = S.nextLine();
+         
+      try{
+        String hour = time.substring(0,2);
+        String mins = time.substring(3);  
+      
+      if(time.length()!=5){
+         if(time.charAt(2)!=':'){
+            throw new NoTimeExists();
+         }
+      }
+      
+      if(Integer.parseInt(hour)>23 || Integer.parseInt(mins) > 59){
+         throw new NoTimeExists();
+      }
+      
+      SDF t1 = new SDF (hour,mins);
+      
+      
+         time = t1.toFull();
+         System.out.println("That time is the same as " + time);      
+      
+        
+    } catch(NoTimeExists | NumberFormatException e2) {
+      System.out.println("There is no such time as " + time);
+    } 
+    
+    System.out.println("Again? Y or N");
+    ans = S.nextLine();  
+    } while (ans.equals("Y"));
+  }
+}
